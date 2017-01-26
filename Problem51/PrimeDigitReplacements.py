@@ -1,4 +1,3 @@
-import re
 import regex as regex
 
 import Utils.MathUtils
@@ -9,8 +8,8 @@ def main():
 
 
 def prime_digit_replacements(digits):
-	#goal: print out matches.
-	#replace every occurence of each digit 1-9 in sets and see what patterns arise
+	# goal: print out matches.
+	# replace every occurence of each digit 1-9 in sets and see what patterns arise
 	primesfive = Utils.MathUtils.gen_primes(10000, 99999)
 
 	primestring = ""
