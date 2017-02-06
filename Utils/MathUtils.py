@@ -24,3 +24,15 @@ def gen_primes(lowerinclusive, upperexclusive):
 			primes.append(i)
 
 	return primes
+
+
+def get_factorial(num):
+	if num == 0 or num == 1:
+		return 1
+	if num == 2:
+		return 2
+	factorial = num
+	while num > 2:
+		num -= 1
+		factorial *= num
+	return factorial
