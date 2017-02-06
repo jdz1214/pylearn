@@ -34,25 +34,16 @@ class Hand:
 				return self.get_rank_index() > other.get_rank_index()
 
 	def __getvals(self):
-		vals = []
-		for card in self.cards:
-			vals.append(card.getvalue())
-		return vals
+		return [card.getvalue() for card in self.cards]
 
 	def __get_valset(self):
 		return set(self.__getvals())
 
 	def __getvalindices(self):
-		valindices = []
-		for card in self.cards:
-			valindices.append(card.getvalueindex())
-		return valindices
+		return [card.getvalueindex() for card in self.cards]
 
 	def __getsuits(self):
-		suits = set()
-		for card in self.cards:
-			suits.add(card.getsuit())
-		return suits
+		return {card.getsuit() for card in self.cards}
 
 	def __evaluaterank(self):
 		if self.royal_flush():
@@ -83,33 +74,22 @@ class Hand:
 		return self.rank
 
 	def royal_flush(self):
-		vals = self.__getvals()
-		return self.all_same_suit() and 'T' in vals and 'J' in vals and 'Q' in vals and 'K' in vals and 'A' in vals
+		return self.all_same_suit() and all(val in self.__getvals() for val in ['T', 'J', 'Q', 'K', 'A'])
 
 	def straight_flush(self):
-		valindices = self.__getvalindices()
-		valindices.sort()
-		for i in range(0, len(valindices) - 1):
-			if valindices[i] != valindices[i + 1] - 1:
-				return False
-		return self.all_same_suit()
+		return self.all_same_suit() and self.straight()
 
 	def four_of_a_kind(self):
-		valset = self.__get_valset()
-		return len(valset) == 2
+		return len(self.__get_valset()) == 2
 
 	def full_house(self):
-		if self.three_of_a_kind():
-			valset = self.__get_valset()
-			return len(valset) == 2
-		return False
+		return self.three_of_a_kind() and len(self.__get_valset()) == 2
 
 	def flush(self):
 		return self.all_same_suit()
 
 	def straight(self):
-		valindices = self.__getvalindices()
-		valindices.sort()
+		valindices = sorted(self.__getvalindices())
 		for i in range(0, len(valindices) - 1):
 			if valindices[i] != valindices[i + 1] - 1:
 				return False
@@ -127,26 +107,20 @@ class Hand:
 		return False
 
 	def two_pair(self):
-		valset = self.__get_valset()
-		return len(valset) == 3
+		return len(self.__get_valset()) == 3
 
 	def one_pair(self):
-		valset = self.__get_valset()
-		return len(valset) == 4
+		return len(self.__get_valset()) == 4
 
 	def high_card(self):
-		maxcard = self.card1
-		for card in self.cards:
-			if card.getvalueindex() > maxcard.getvalueindex():
-				maxcard = card
-		return maxcard
+		return max(self.cards, key=lambda c: c.getvalueindex())
 
 	def rank_high_card(self):
-		if self.get_rank() == 'High Card' or self.get_rank() == 'Straight Flush' or self.get_rank() == 'Flush':
+		valset = self.__get_valset()
+		if self.get_rank() in ['High Card', 'Straight Flush', 'Flush']:
 			return self.high_card()
 
-		if self.get_rank() == 'Four of a Kind':
-			valset = self.__get_valset()
+		elif self.get_rank() == 'Four of a Kind':
 			fourval = ''
 			count = 0
 			for val in valset:
@@ -155,12 +129,9 @@ class Hand:
 						count += 1
 				if count == 4:
 					fourval = val
-			for card in self.cards:
-				if card.getvalue() == fourval:
-					return card
+			return (card for card in self.cards if card.getvalue() == fourval)
 
-		if self.get_rank() == 'Full House' or self.get_rank() == 'Three of a Kind':
-			valset = self.__get_valset()
+		elif self.get_rank() in ['Full House', 'Three of a Kind']:
 			threeval = ''
 			count = 0
 			for val in valset:
@@ -173,35 +144,20 @@ class Hand:
 				if card.getvalue() == threeval:
 					return card
 
-		if self.get_rank() == 'Two Pairs':
-			valset = self.__get_valset()
+		elif self.get_rank() == 'Two Pairs':
 			maxvalindex = 0
 			for val in valset:
-				valcount = 0
-				for card in self.cards:
-					if card.getvalue() == val:
-						valcount += 1
-				if valcount == 2:
+				if len([card.getvalue() for card in self.cards if card.getvalue() == val]) == 2:
 					if maxvalindex < Card.getvalueindex(val):
 						maxvalindex = Card.getvalueindex(val)
-			for card in self.cards:
-				if card.getvalueindex() == maxvalindex:
-					return card
+			return (card for card in self.cards if card.getvalueindex() == maxvalindex)
 
-		if self.get_rank() == 'One Pair':
-			valset = self.__get_valset()
+		elif self.get_rank() == 'One Pair':
 			for val in valset:
-				valcount = 0
-				for card in self.cards:
-					if card.getvalue() == val:
-						valcount += 1
-				if valcount == 2:
+				if len([card.getvalue() for card in self.cards if card.getvalue() == val]) == 2:
 					for card in self.cards:
 						if card.getvalue() == val:
 							return card
 
 	def all_same_suit(self):
-		suits = []
-		for card in self.cards:
-			suits.append(card.getsuit())
-		return len(set(suits)) == 1
+		return len(set(card.getsuit() for card in self.cards)) == 1
