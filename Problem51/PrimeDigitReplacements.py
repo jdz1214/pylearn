@@ -3,7 +3,7 @@ import Utils.MathUtils
 
 
 def main():
-	familysize = 8
+	familysize = 7
 	find_family(familysize)
 
 
