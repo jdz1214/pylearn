@@ -1,0 +1,12 @@
+Prime Digit Replacement Strategy
+
+Stars are initially location-based constants which are later processed as same-number digit variables.
+
+From 1 to n.length - 1, Generate combinations of digit values and asterisks.
+
+	- Can do this a certain way:
+	- for n = 5:
+		- **000
+		- generate all combinations of this, e.g. **001, **002, **003...**999, then mutate these as strings to get all combinations of * and digits.
+
+Pass **000 combination to a function that replaces each * with values from 0-9, checks the result for prime, and returns the count of primes for the pattern.
