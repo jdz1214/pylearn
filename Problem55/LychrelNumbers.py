@@ -1,6 +1,10 @@
+import TextUtils
+
+
 def main():
-	testinput = '1221'
-	rev = 0
+	testinput = '1223'
+	rev = TextUtils.get_palindrome(testinput)
+
 	print('1221 ',)
 	print(rev)
 

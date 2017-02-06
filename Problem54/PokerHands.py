@@ -1,5 +1,5 @@
-from Problem54.Card import Card
-from Problem54.Hand import Hand
+from Hand import Hand
+from Card import Card
 
 
 def main():
