@@ -1,33 +1,58 @@
-import regex as regex
-
+import Utils.TextUtils
 import Utils.MathUtils
 
 
 def main():
-	prime_digit_replacements(8)
+	familysize = 8
+	find_family(familysize)
 
 
-def prime_digit_replacements(digits):
-	# goal: print out matches.
-	# replace every occurence of each digit 1-9 in sets and see what patterns arise
-	primesfive = Utils.MathUtils.gen_primes(10000, 99999)
+def find_family(familysize):
+	primefamily = prime_digit_replacements(familysize)
+	if primefamily:
+		print("Found ", len(primefamily), " prime families of size ", familysize, ":")
+		counter = 1
+		for p in primefamily:
+			print("Family ", counter, ":")
+			for f in p:
+				print(f)
+			print()
+			counter += 1
+	else:
+		print("Did not find prime family.")
 
-	primestring = ""
 
-	for prime in primesfive:
-		primestring += str(prime) + "\n"
+def prime_digit_replacements(familysize):
+	for i in range(2, 7):
+		combos = set()
+		families = []
+		for j in range(1, i):
+			digits = Utils.TextUtils.num_permute(i - j)
+			for d in digits:
+				s = (Utils.TextUtils.permute('*' * j + d))
+				for val in s:
+					combos.add(val)
+		for combo in combos:
+			primelist = check_combo(combo)
+			if len(primelist) == familysize:
+				families.append(primelist)
+		if len(families) > 0:
+			return families
 
-	for first in range(0, 10):
-		for second in range(0, 10):
-			for third in range(0, 10):
-				zee = str(first) + str(second) + "((\d)\\2)" + str(third)
-				p = regex.compile(zee)
-				replacedstrings = regex.finditer(p, primestring)
 
-				relist = list(replacedstrings)
-				if len(relist) == 7:
-					for l in relist:
-						print(l.group(0))
-
+def check_combo(combo):
+	primelist = []
+	for i in range(0, 10):
+		x = combo
+		newx = ''
+		for letter in x:
+			if letter == '*':
+				newx += str(i)
+			else:
+				newx += letter
+		num = int(newx)
+		if len(str(num)) == len(combo) and Utils.MathUtils.is_prime(num):
+			primelist.append(num)
+	return primelist
 
 main()
