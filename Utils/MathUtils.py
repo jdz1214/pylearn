@@ -26,6 +26,16 @@ def gen_primes(lowerinclusive, upperexclusive):
 	return primes
 
 
+def primes_sieve(upperinclusive):  # sieve of eratosthenes
+	ps, sieve = [], [True] * (upperinclusive + 1)
+	for p in range(2, upperinclusive + 1):
+		if sieve[p]:
+			ps.append(p)
+			for i in range(p * p, upperinclusive + 1, p):
+				sieve[i] = False
+	return set(ps)
+
+
 def get_factorial(num):
 	if num == 0 or num == 1:
 		return 1

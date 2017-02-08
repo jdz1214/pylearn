@@ -1,0 +1,22 @@
+Results for familysize 4 with up to 3 digit numbers:
+1838
+c:  827
+c:  23
+c:  677
+c:  311
+
+792
+c:  673
+c:  7
+c:  3
+c:  109
+((673, 7, 3, 109), (827, 23, 677, 311))
+
+Generate all combinations of each set with another prime.
+
+Create new primelist with prime-permutable pairs.
+    -> Combine pairs to find valid sets again.
+
+
+
+   Result =  ['13', '8389', '6733', '5197', '5701']
